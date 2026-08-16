@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loviza — AI Brand Strategist + Auto Content Engine</title>
+  <meta name="description" content="Loviza turns your brand strategy into an always-on content engine: create, optimize, schedule and learn automatically." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
+          },
+          colors: {
+            ink: '#08080A',
+            panel: '#101012',
+            line: '#26262A',
+            cream: '#FAFAF9'
+          },
+          boxShadow: {
+            glow: '0 0 60px rgba(139,92,246,.18)',
+            card: '0 18px 70px rgba(0,0,0,.42)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg:#08080A;
+      --panel:#101012;
+      --panel2:#141416;
+      --line:#29292d;
+      --muted:#9a9aa2;
+      --white:#fafaf9;
+      --violet:#8b5cf6;
+      --pink:#ec4899;
+      --cyan:#22d3ee;
+      --lime:#b7f34a;
+      --orange:#fb923c;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at 78% 8%, rgba(124,58,237,.14), transparent 25%),
+        radial-gradient(circle at 12% 40%, rgba(34,211,238,.07), transparent 22%),
+        var(--bg);
+      color:var(--white);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      overflow-x:hidden;
+    }
+    ::selection{background:#a78bfa;color:#09090b}
+    .grain:before{
+      content:"";
+      position:fixed; inset:0; pointer-events:none; opacity:.035; z-index:40;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+    }
+    .grid-bg{
+      background-image:
+        linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+      background-size:32px 32px;
+      mask-image:linear-gradient(to bottom,black,transparent 80%);
+    }
+    .card{
+      background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:0 18px 70px rgba(0,0,0,.34);
+      backdrop-filter:blur(18px);
+    }
+    .card:hover{border-color:rgba(255,255,255,.18)}
+    .shine{position:relative;overflow:hidden}
+    .shine:after{
+      content:"";position:absolute;inset:-120% 40% auto -40%;height:180%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);
+      transform:rotate(16deg);animation:sweep 6s ease-in-out infinite;
+    }
+    @keyframes sweep{0%,55%{transform:translateX(-80%) rotate(16deg)}75%,100%{transform:translateX(90%) rotate(16deg)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(183,243,74,.35)}50%{box-shadow:0 0 0 7px rgba(183,243,74,0)}}
+    @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    @keyframes bar{from{transform:scaleY(.15)}to{transform:scaleY(1)}}
+    .float{animation:float 5s ease-in-out infinite}
+    .live-dot{animation:pulseDot 2s infinite}
+    .marquee{animation:scrollX 28s linear infinite}
+    .bar{transform-origin:bottom;animation:bar 1.2s cubic-bezier(.2,.8,.2,1) both}
+    .gradient-text{
+      background:linear-gradient(100deg,#fff 10%,#c4b5fd 48%,#67e8f9 85%);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .gradient-border{
+      position:relative;
+    }
+    .gradient-border:before{
+      content:"";position:absolute;inset:0;padding:1px;border-radius:inherit;
+      background:linear-gradient(120deg,rgba(167,139,250,.8),rgba(34,211,238,.35),rgba(236,72,153,.35),rgba(255,255,255,.08));
+      -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+    }
+    .phone{
+      border:7px solid #1d1d21;border-radius:30px;
+      box-shadow:0 30px 90px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.08);
+      background:#f7f5f1;color:#111;
+    }
+    .noise{background-image:radial-gradient(rgba(255,255,255,.08) .7px,transparent .7px);background-size:7px 7px}
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.visible{opacity:1;transform:none}
+    .nav-blur{background:rgba(8,8,10,.72);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .cursor{display:inline-block;width:7px;height:1.05em;background:#c4b5fd;vertical-align:-.15em;animation:blink 1s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+    @media (prefers-reduced-motion:reduce){
+      *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    }
+  </style>
+</head>
+
+<body class="grain">
+  <div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
+
+  <!-- NAV -->
+  <header class="nav-blur fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-[1380px] mx-auto px-5 lg:px-8 h-[68px] flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5 font-semibold tracking-tight">
+        <span class="w-7 h-7 rounded-[9px] bg-white text-black grid place-items-center font-black text-[12px]">L</span>
+        <span class="text-[15px]">LOVIZA</span>
+        <span class="text-[9px] uppercase tracking-[.18em] px-2 py-1 rounded-full border border-white/10 text-white/50">Pro</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-1 text-[12px] text-white/60">
+        <a class="px-3 py-2 rounded-full hover:bg-white/5 hover:text-white transition" href="#platform">Platform</a>
+        <a class="px-3 py-2 rounded-full hover:bg-white/5 hover:text-white transition" href="#intelligence">AI Strategy</a>
+        <a class="px-3 py-2 rounded-full hover:bg-white/5 hover:text-white transition" href="#autopilot">Auto-Pilot</a>
+        <a class="px-3 py-2 rounded-full hover:bg-white/5 hover:text-white transition" href="#analytics">Analytics</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <button class="hidden sm:block text-[12px] text-white/60 px-3 py-2 hover:text-white">Log in</button>
+        <button onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})" class="text-[12px] font-semibold bg-white text-black px-4 py-2 rounded-full hover:bg-violet-200 transition">Start for free →</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 pt-[68px]">
+    <!-- HERO -->
+    <section class="max-w-[1380px] mx-auto px-5 lg:px-8 pt-10 lg:pt-16 pb-7">
+      <div class="grid lg:grid-cols-[1.08fr_.92fr] gap-3">
+        <div class="card gradient-border rounded-[20px] min-h-[470px] lg:min-h-[560px] p-7 lg:p-11 flex flex-col justify-between overflow-hidden relative shine">
+          <div class="absolute -top-32 -right-28 w-[440px] h-[440px] rounded-full bg-violet-600/10 blur-3xl"></div>
+          <div>
+            <div class="flex items-center gap-2 text-[10px] uppercase tracking-[.18em] text-white/45 mb-7">
+              <span class="w-1.5 h-1.5 rounded-full bg-lime-300 live-dot"></span>
+              AI brand operating system
+            </div>
+            <h1 class="max-w-[760px] text-[46px] sm:text-[58px] lg:text-[76px] leading-[.93] font-semibold tracking-[-.055em]">
+              Your brand.<br/>
+              <span class="gradient-text">Always creating.</span>
+            </h1>
+            <p class="mt-7 max-w-[590px] text-[15px] lg:text-[17px] leading-7 text-white/55">
+              Loviza is your AI Brand Strategist + Auto-Content Engine. Turn one idea into a week of on-brand content, then let your autopilot publish, learn and improve it.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <button onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})" class="px-5 py-3 rounded-full bg-white text-black text-[13px] font-semibold hover:scale-[1.02] transition">Build my content engine <span class="ml-1">↗</span></button>
+              <button onclick="document.getElementById('platform').scrollIntoView({behavior:'smooth'})" class="px-5 py-3 rounded-full border border-white/10 bg-white/[.03] text-[13px] text-white/75 hover:bg-white/[.07] transition">See how Loviza works</button>
+            </div>
+          </div>
+          <div class="mt-10 grid grid-cols-3 gap-2 max-w-[650px]">
+            <div class="rounded-xl border border-white/8 bg-black/20 p-3">
+              <div class="text-[10px] text-white/35 uppercase tracking-widest">Create</div>
+              <div class="mt-1 text-[13px]">Ideas → posts</div>
+            </div>
+            <div class="rounded-xl border border-white/8 bg-black/20 p-3">
+              <div class="text-[10px] text-white/35 uppercase tracking-widest">Publish</div>
+              <div class="mt-1 text-[13px]">Autopilot → everywhere</div>
+            </div>
+            <div class="rounded-xl border border-white/8 bg-black/20 p-3">
+              <div class="text-[10px] text-white/35 uppercase tracking-widest">Learn</div>
+              <div class="mt-1 text-[13px]">Performance → strategy</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HERO DASHBOARD VISUAL -->
+        <div class="grid grid-rows-[1.08fr_.92fr] gap-3">
+          <div class="card rounded-[20px] p-5 relative overflow-hidden min-h-[270px]">
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-[10px] text-white/35 uppercase tracking-widest">Loviza Brand Brain</div>
+                <div class="text-[17px] font-semibold mt-1">Strategy in motion</div>
+              </div>
+              <span class="text-[10px] text-lime-200 bg-lime-300/10 border border-lime-300/15 rounded-full px-2.5 py-1">LIVE</span>
+            </div>
+            <div class="mt-5 grid grid-cols-[1.2fr_.8fr] gap-3 h-[205px]">
+              <div class="rounded-2xl bg-[#0b0b0e] border border-white/7 p-4 relative overflow-hidden">
+                <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-violet-600/10 to-transparent"></div>
+                <div class="text-[10px] text-white/35">CONTENT MOMENTUM</div>
+                <div class="mt-1 text-3xl font-semibold">+84.6%</div>
+                <div class="mt-5 flex items-end gap-1 h-[90px]">
+                  <i class="bar w-[8%] h-[28%] rounded-t bg-violet-500/30"></i>
+                  <i class="bar w-[8%] h-[36%] rounded-t bg-violet-500/40" style="animation-delay:.05s"></i>
+                  <i class="bar w-[8%] h-[46%] rounded-t bg-violet-500/50" style="animation-delay:.1s"></i>
+                  <i class="bar w-[8%] h-[42%] rounded-t bg-violet-500/50" style="animation-delay:.15s"></i>
+                  <i class="bar w-[8%] h-[60%] rounded-t bg-violet-500/60" style="animation-delay:.2s"></i>
+                  <i class="bar w-[8%] h-[72%] rounded-t bg-violet-500/70" style="animation-delay:.25s"></i>
+                  <i class="bar w-[8%] h-[64%] rounded-t bg-violet-500/70" style="animation-delay:.3s"></i>
+                  <i class="bar w-[8%] h-[86%] rounded-t bg-violet-400/90" style="animation-delay:.35s"></i>
+                  <i class="bar w-[8%] h-[74%] rounded-t bg-cyan-300/80" style="animation-delay:.4s"></i>
+                  <i class="bar w-[8%] h-[100%] rounded-t bg-cyan-200" style="animation-delay:.45s"></i>
+                </div>
+              </div>
+              <div class="rounded-2xl bg-[#0b0b0e] border border-white/7 p-4">
+                <div class="text-[10px] text-white/35">NEXT BEST MOVE</div>
+                <div class="mt-3 text-[15px] leading-5 font-medium">Turn your product story into a 3-part Reel.</div>
+                <div class="mt-5 space-y-2">
+                  <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div class="h-full w-[82%] bg-violet-400 rounded-full"></div></div>
+                  <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div class="h-full w-[64%] bg-cyan-300 rounded-full"></div></div>
+                  <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div class="h-full w-[91%] bg-pink-400 rounded-full"></div></div>
+                </div>
+                <div class="mt-4 text-[10px] text-white/35">Hook · Proof · CTA</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="card rounded-[20px] p-5 overflow-hidden">
+              <div class="text-[10px] text-white/35 uppercase tracking-widest">Content Queue</div>
+              <div class="mt-2 text-2xl font-semibold">27 <span class="text-xs text-white/35 font-normal">ready to publish</span></div>
+              <div class="mt-5 space-y-2">
+                <div class="flex items-center gap-2 p-2 rounded-xl bg-white/[.03] border border-white/6">
+                  <span class="w-6 h-6 rounded-lg bg-pink-500/15 grid place-items-center text-[11px]">◎</span><span class="text-[11px]">Founder POV Reel</span><span class="ml-auto text-[9px] text-lime-200">09:30</span>
+                </div>
+                <div class="flex items-center gap-2 p-2 rounded-xl bg-white/[.03] border border-white/6">
+                  <span class="w-6 h-6 rounded-lg bg-cyan-400/15 grid place-items-center text-[11px]">in</span><span class="text-[11px]">AI Strategy thread</span><span class="ml-auto text-[9px] text-white/35">11:00</span>
+                </div>
+                <div class="flex items-center gap-2 p-2 rounded-xl bg-white/[.03] border border-white/6">
+                  <span class="w-6 h-6 rounded-lg bg-white/10 grid place-items-center text-[11px]">▶</span><span class="text-[11px]">Product teardown</span><span class="ml-auto text-[9px] text-white/35">14:15</span>
+                </div>
+              </div>
+            </div>
+            <div class="rounded-[20px] p-5 relative overflow-hidden bg-gradient-to-br from-violet-500 via-fuchsia-500 to-cyan-300 text-black">
+              <div class="relative z-10">
+                <div class="text-[10px] uppercase tracking-widest font-semibold opacity-60">One idea</div>
+                <div class="mt-2 text-[28px] leading-7 font-semibold tracking-tight">12<br/>content assets.</div>
+                <div class="mt-6 text-[11px] font-medium opacity-70">Posts · Reels · Carousels · Stories</div>
+              </div>
+              <div class="absolute -right-8 -bottom-10 w-40 h-40 rounded-full border-[22px] border-black/10"></div>
+              <div class="absolute right-4 bottom-4 text-5xl font-black opacity-10">L</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST / MARQUEE -->
+    <section class="border-y border-white/7 bg-white/[.015] overflow-hidden">
+      <div class="max-w-[1380px] mx-auto px-5 lg:px-8 py-4 flex items-center gap-5">
+        <span class="shrink-0 text-[9px] uppercase tracking-[.2em] text-white/30">Built for modern content teams</span>
+        <div class="overflow-hidden whitespace-nowrap flex-1">
+          <div class="marquee inline-flex gap-10 text-[11px] text-white/35">
+            <span>BRAND STRATEGY</span><span>•</span><span>AI COPY</span><span>•</span><span>REELS</span><span>•</span><span>LINKEDIN</span><span>•</span><span>INSTAGRAM</span><span>•</span><span>CONTENT CALENDAR</span><span>•</span><span>A/B HOOKS</span><span>•</span><span>ANALYTICS</span><span>•</span>
+            <span>BRAND STRATEGY</span><span>•</span><span>AI COPY</span><span>•</span><span>REELS</span><span>•</span><span>LINKEDIN</span><span>•</span><span>INSTAGRAM</span><span>•</span><span>CONTENT CALENDAR</span><span>•</span><span>A/B HOOKS</span><span>•</span><span>ANALYTICS</span><span>•</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLATFORM -->
+    <section id="platform" class="max-w-[1380px] mx-auto px-5 lg:px-8 py-20 lg:py-28">
+      <div class="grid lg:grid-cols-[.72fr_1.28fr] gap-12 items-end reveal">
+        <div>
+          <div class="text-[10px] uppercase tracking-[.2em] text-violet-300 mb-4">The content operating system</div>
+          <h2 class="text-4xl lg:text-6xl font-semibold tracking-[-.045em] leading-[.95]">Stop posting.<br/><span class="text-white/35">Start operating.</span></h2>
+        </div>
+        <p class="max-w-[650px] text-white/50 leading-7 text-[15px]">Loviza connects strategy, creation, scheduling and performance into one intelligent loop. Every post gives the next post more context.</p>
+      </div>
+
+      <div class="mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="card rounded-[18px] p-6 min-h-[230px] reveal">
+          <div class="w-10 h-10 rounded-xl bg-violet-500/12 border border-violet-400/15 grid place-items-center text-violet-300 font-semibold">01</div>
+          <h3 class="mt-7 text-[18px] font-semibold">Brand Brain</h3>
+          <p class="mt-2 text-[12px] leading-5 text-white/42">Loviza learns your positioning, voice, audience, offers and visual language.</p>
+          <div class="mt-5 flex gap-1 flex-wrap"><span class="px-2 py-1 rounded-full bg-white/5 text-[9px] text-white/45">Voice</span><span class="px-2 py-1 rounded-full bg-white/5 text-[9px] text-white/45">Audience</span><span class="px-2 py-1 rounded-full bg-white/5 text-[9px] text-white/45">Offers</span></div>
+        </div>
+        <div class="card rounded-[18px] p-6 min-h-[230px] reveal">
+          <div class="w-10 h-10 rounded-xl bg-cyan-400/10 border border-cyan-300/15 grid place-items-center text-cyan-200 font-semibold">02</div>
+          <h3 class="mt-7 text-[18px] font-semibold">Content Studio</h3>
+          <p class="mt-2 text-[12px] leading-5 text-white/42">Generate scripts, carousels, posts, hooks and short-form video concepts in seconds.</p>
+          <div class="mt-5 flex -space-x-2"><span class="w-8 h-8 rounded-full bg-violet-500/60 border-2 border-[#101012]"></span><span class="w-8 h-8 rounded-full bg-cyan-400/60 border-2 border-[#101012]"></span><span class="w-8 h-8 rounded-full bg-pink-400/60 border-2 border-[#101012]"></span><span class="w-8 h-8 rounded-full bg-white/20 border-2 border-[#101012] text-[9px] grid place-items-center">+9</span></div>
+        </div>
+        <div class="card rounded-[18px] p-6 min-h-[230px] reveal">
+          <div class="w-10 h-10 rounded-xl bg-pink-400/10 border border-pink-300/15 grid place-items-center text-pink-200 font-semibold">03</div>
+          <h3 class="mt-7 text-[18px] font-semibold">Auto-Pilot</h3>
+          <p class="mt-2 text-[12px] leading-5 text-white/42">Fill your calendar, approve once, then let Loviza publish at the right time.</p>
+          <div class="mt-5 h-2 rounded-full bg-white/5 overflow-hidden"><div class="h-full w-[78%] bg-gradient-to-r from-pink-400 to-violet-400 rounded-full"></div></div>
+        </div>
+        <div class="card rounded-[18px] p-6 min-h-[230px] reveal">
+          <div class="w-10 h-10 rounded-xl bg-lime-300/10 border border-lime-300/15 grid place-items-center text-lime-200 font-semibold">04</div>
+          <h3 class="mt-7 text-[18px] font-semibold">Growth Loop</h3>
+          <p class="mt-2 text-[12px] leading-5 text-white/42">Performance becomes strategy. Loviza learns which hooks, formats and topics win.</p>
+          <div class="mt-5 flex items-center gap-2 text-[10px] text-lime-200"><span class="w-2 h-2 rounded-full bg-lime-300"></span> Learning from 248 posts</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI STRATEGIST -->
+    <section id="intelligence" class="max-w-[1380px] mx-auto px-5 lg:px-8 pb-20 lg:pb-28">
+      <div class="card rounded-[24px] overflow-hidden reveal">
+        <div class="grid lg:grid-cols-[.8fr_1.2fr]">
+          <div class="p-7 lg:p-12 bg-gradient-to-br from-violet-500/12 via-transparent to-cyan-400/7">
+            <div class="text-[10px] uppercase tracking-[.2em] text-cyan-200/70">AI Brand Strategist</div>
+            <h2 class="mt-5 text-4xl lg:text-5xl font-semibold tracking-[-.04em] leading-[.98]">A strategist that never clocks out.</h2>
+            <p class="mt-6 text-[14px] leading-6 text-white/45">Instead of asking AI to “write a post,” Loviza decides what your audience should hear next — and why.</p>
+            <div class="mt-8 space-y-3">
+              <div class="flex gap-3"><span class="text-violet-300">✦</span><span class="text-[12px] text-white/60">Detects content gaps and opportunities</span></div>
+              <div class="flex gap-3"><span class="text-cyan-300">✦</span><span class="text-[12px] text-white/60">Turns product stories into repeatable series</span></div>
+              <div class="flex gap-3"><span class="text-pink-300">✦</span><span class="text-[12px] text-white/60">Adapts one idea to every social channel</span></div>
+            </div>
+          </div>
+          <div class="p-5 lg:p-8 bg-black/20">
+            <div class="rounded-[18px] border border-white/8 bg-[#0c0c0f] p-5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2"><span class="w-7 h-7 rounded-lg bg-white text-black grid place-items-center font-black text-[10px]">L</span><span class="text-[12px] font-medium">Loviza Strategy Agent</span></div>
+                <span class="text-[9px] text-lime-200 bg-lime-300/8 border border-lime-300/10 px-2 py-1 rounded-full">thinking</span>
+              </div>
+              <div class="mt-5 p-4 rounded-2xl bg-white/[.025] border border-white/6">
+                <div class="text-[10px] text-white/30 uppercase tracking-widest">Your signal</div>
+                <p class="mt-2 text-[13px] leading-5 text-white/70">“Your audience engages 2.4× more when you show the problem before the product.”</p>
+              </div>
+              <div class="mt-3 grid grid-cols-3 gap-2">
+                <div class="p-3 rounded-xl bg-violet-500/8 border border-violet-400/10"><div class="text-[9px] text-white/30">HOOK</div><div class="mt-2 text-[11px]">“You’re doing this wrong…”</div></div>
+                <div class="p-3 rounded-xl bg-cyan-400/8 border border-cyan-300/10"><div class="text-[9px] text-white/30">FORMAT</div><div class="mt-2 text-[11px]">Founder POV</div></div>
+                <div class="p-3 rounded-xl bg-pink-400/8 border border-pink-300/10"><div class="text-[9px] text-white/30">CTA</div><div class="mt-2 text-[11px]">See the workflow</div></div>
+              </div>
+              <div class="mt-3 p-4 rounded-2xl bg-gradient-to-r from-violet-500/10 to-cyan-400/7 border border-white/6">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] text-white/35 uppercase tracking-widest">Recommended series</span>
+                  <span class="text-[10px] text-violet-200">4 posts</span>
+                </div>
+                <div class="mt-3 grid grid-cols-4 gap-2">
+                  <div class="h-16 rounded-lg bg-gradient-to-br from-violet-500/40 to-black flex items-end p-2 text-[9px]">01 Problem</div>
+                  <div class="h-16 rounded-lg bg-gradient-to-br from-cyan-400/35 to-black flex items-end p-2 text-[9px]">02 Insight</div>
+                  <div class="h-16 rounded-lg bg-gradient-to-br from-pink-400/35 to-black flex items-end p-2 text-[9px]">03 Proof</div>
+                  <div class="h-16 rounded-lg bg-gradient-to-br from-lime-300/25 to-black flex items-end p-2 text-[9px]">04 CTA</div>
+                </div>
+              </div>
+              <div class="mt-4 text-[11px] text-white/30">Writing next recommendation<span class="cursor ml-1"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTOPILOT -->
+    <section id="autopilot" class="max-w-[1380px] mx-auto px-5 lg:px-8 pb-20 lg:pb-28">
+      <div class="grid lg:grid-cols-[1fr_1fr] gap-3">
+        <div class="card rounded-[22px] p-7 lg:p-10 reveal">
+          <div class="flex items-center justify-between">
+            <div><div class="text-[10px] uppercase tracking-[.2em] text-white/30">Auto-Pilot</div><h2 class="mt-2 text-3xl font-semibold tracking-tight">One click to go from idea → everywhere.</h2></div>
+            <div class="w-10 h-10 rounded-full bg-lime-300/10 border border-lime-300/15 grid place-items-center text-lime-200">✓</div>
+          </div>
+          <div class="mt-9 relative">
+            <div class="absolute left-[15px] top-4 bottom-4 w-px bg-gradient-to-b from-violet-400 via-cyan-300 to-lime-300/10"></div>
+            <div class="space-y-7">
+              <div class="relative pl-10"><span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-[#15151a] border border-violet-300/40 grid place-items-center text-[10px] text-violet-200">01</span><div class="text-[13px] font-semibold">Connect accounts</div><div class="text-[11px] text-white/35 mt-1">LinkedIn · Instagram · X · Facebook · YouTube</div></div>
+              <div class="relative pl-10"><span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-[#15151a] border border-cyan-300/40 grid place-items-center text-[10px] text-cyan-200">02</span><div class="text-[13px] font-semibold">Generate a content week</div><div class="text-[11px] text-white/35 mt-1">Loviza creates platform-native versions automatically.</div></div>
+              <div class="relative pl-10"><span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-[#15151a] border border-pink-300/40 grid place-items-center text-[10px] text-pink-200">03</span><div class="text-[13px] font-semibold">Approve once</div><div class="text-[11px] text-white/35 mt-1">Review everything in one clean calendar.</div></div>
+              <div class="relative pl-10"><span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-[#15151a] border border-lime-300/40 grid place-items-center text-[10px] text-lime-200">04</span><div class="text-[13px] font-semibold">Loviza takes over</div><div class="text-[11px] text-white/35 mt-1">Publish → measure → learn → improve.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card rounded-[22px] p-5 overflow-hidden reveal">
+          <div class="flex items-center justify-between px-2">
+            <div><div class="text-[10px] uppercase tracking-[.2em] text-white/30">Smart calendar</div><div class="text-[15px] font-semibold mt-1">August · Week 3</div></div>
+            <button class="text-[10px] rounded-full border border-white/10 px-3 py-1.5 text-white/55">Auto-fill week</button>
+          </div>
+          <div class="mt-5 grid grid-cols-7 gap-1.5">
+            <div class="text-[9px] text-white/25 text-center py-2">MON</div><div class="text-[9px] text-white/25 text-center py-2">TUE</div><div class="text-[9px] text-white/25 text-center py-2">WED</div><div class="text-[9px] text-white/25 text-center py-2">THU</div><div class="text-[9px] text-white/25 text-center py-2">FRI</div><div class="text-[9px] text-white/25 text-center py-2">SAT</div><div class="text-[9px] text-white/25 text-center py-2">SUN</div>
+            <div class="h-24 rounded-xl border border-white/6 bg-white/[.02] p-2"><span class="text-[9px] text-white/30">18</span><div class="mt-2 rounded-lg bg-violet-500/20 border border-violet-300/10 p-2 text-[9px]">Founder POV</div></div>
+            <div class="h-24 rounded-xl border border-white/6 bg-white/[.02] p-2"><span class="text-[9px] text-white/30">19</span><div class="mt-2 rounded-lg bg-cyan-400/15 border border-cyan-300/10 p-2 text-[9px]">Carousel</div></div>
+            <div class="h-24 rounded-xl border border-white/6 bg-white/[.02] p-2"><span class="text-[9px] text-white/30">20</span><div class="mt-2 rounded-lg bg-pink-400/15 border border-pink-300/10 p-2 text-[9px]">Reel</div></div>
+            <div class="h-24 rounded-xl border border-white/6 bg-white/[.02] p-2"><span class="text-[9px] text-white/30">21</span><div class="mt-2 rounded-lg bg-lime-300/10 border border-lime-300/10 p-2 text-[9px]">Case study</div></div>
+            <div class="h-24 rounded-xl border border-white/6 bg-white/[.02] p-2"><span class="text-[9px] text-white/30">22</span><div class="mt-2 rounded-lg bg-violet-500/20 border border-violet-300/10 p-2 text-[9px]">Thread</div></div>
+            <div class="h-24 rounded-xl border border-white/6 bg-white/[.02] p-2"><span class="text-[9px] text-white/30">23</span><div class="mt-2 rounded-lg bg-cyan-400/15 border border-cyan-300/10 p-2 text-[9px]">Story</div></div>
+            <div class="h-24 rounded-xl border border-white/6 bg-white/[.02] p-2"><span class="text-[9px] text-white/30">24</span><div class="mt-2 rounded-lg bg-pink-400/15 border border-pink-300/10 p-2 text-[9px]">Product drop</div></div>
+          </div>
+          <div class="mt-4 grid grid-cols-3 gap-2">
+            <div class="rounded-xl bg-white/[.025] border border-white/6 p-3"><div class="text-[9px] text-white/30">SCHEDULED</div><div class="text-lg font-semibold mt-1">21</div></div>
+            <div class="rounded-xl bg-white/[.025] border border-white/6 p-3"><div class="text-[9px] text-white/30">CHANNELS</div><div class="text-lg font-semibold mt-1">05</div></div>
+            <div class="rounded-xl bg-white/[.025] border border-white/6 p-3"><div class="text-[9px] text-white/30">TIME SAVED</div><div class="text-lg font-semibold mt-1">14h</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOCIAL POSTS -->
+    <section class="max-w-[1380px] mx-auto px-5 lg:px-8 pb-20 lg:pb-28">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 reveal">
+        <div><div class="text-[10px] uppercase tracking-[.2em] text-pink-300/80">Platform-native content</div><h2 class="mt-3 text-4xl lg:text-5xl font-semibold tracking-[-.04em]">One story.<br/><span class="text-white/35">Five ways to share it.</span></h2></div>
+        <p class="text-[13px] text-white/40 max-w-[420px] leading-6">Loviza doesn't copy-paste. It rewrites the same strategic idea for the culture and format of each network.</p>
+      </div>
+
+      <div class="mt-9 grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <!-- LinkedIn -->
+        <div class="phone p-3 min-h-[410px] transform hover:-translate-y-2 transition duration-500 reveal">
+          <div class="flex items-center gap-2 px-2 py-2"><div class="w-7 h-7 rounded-full bg-[#0a66c2] text-white text-[10px] grid place-items-center font-bold">in</div><div><div class="text-[10px] font-semibold">Loviza</div><div class="text-[8px] opacity-45">Just now</div></div><span class="ml-auto text-black/35">•••</span></div>
+          <div class="px-2 text-[11px] leading-4 mt-2">Most brands don't have a content problem.<br/><br/><b>They have a feedback-loop problem.</b><br/><br/>Create → publish → measure → learn → repeat.</div>
+          <div class="mt-4 mx-2 h-36 rounded-2xl bg-gradient-to-br from-[#19143b] via-[#4338ca] to-[#67e8f9] p-4 text-white flex flex-col justify-between"><span class="text-[8px] uppercase tracking-widest opacity-60">LOVIZA / INSIGHT</span><span class="text-[20px] leading-5 font-semibold">Your content<br/>should learn.</span></div>
+          <div class="px-2 mt-3 text-[8px] opacity-40">♡ 842 likes · 74 comments · 31 reposts</div>
+        </div>
+        <!-- Instagram -->
+        <div class="phone p-3 min-h-[410px] transform hover:-translate-y-2 transition duration-500 reveal">
+          <div class="flex items-center gap-2 px-2 py-2"><div class="w-7 h-7 rounded-full bg-gradient-to-br from-yellow-300 via-pink-500 to-violet-600 text-white text-[10px] grid place-items-center">◎</div><div><div class="text-[10px] font-semibold">loviza.ai</div><div class="text-[8px] opacity-45">REEL · 0:17</div></div><span class="ml-auto text-black/35">•••</span></div>
+          <div class="mx-2 h-52 rounded-2xl bg-[#0d0b18] overflow-hidden relative">
+            <div class="absolute -top-8 -right-8 w-32 h-32 bg-violet-500/70 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 -left-8 w-36 h-36 bg-cyan-300/60 rounded-full blur-2xl"></div>
+            <div class="relative z-10 p-5 h-full flex flex-col justify-end text-white"><span class="text-[8px] tracking-widest opacity-50">HOOK / 01</span><div class="text-[22px] leading-5 font-bold mt-2">Posting every day<br/>isn't the strategy.</div><div class="mt-3 text-[9px] opacity-60">Loviza found a better loop →</div></div>
+          </div>
+          <div class="px-2 mt-3 text-[9px]"><b>loviza.ai</b> Your AI content team, on autopilot.</div>
+          <div class="px-2 mt-2 text-[8px] opacity-40">♡ 12.4K · 1,102 comments</div>
+        </div>
+        <!-- X -->
+        <div class="phone p-3 min-h-[410px] transform hover:-translate-y-2 transition duration-500 reveal">
+          <div class="flex items-center gap-2 px-2 py-2"><div class="w-7 h-7 rounded-full bg-black text-white border border-black/10 text-[11px] grid place-items-center">𝕏</div><div><div class="text-[10px] font-semibold">Loviza</div><div class="text-[8px] opacity-45">@lovizaai</div></div><span class="ml-auto text-black/35">•••</span></div>
+          <div class="px-2 text-[12px] leading-5 mt-4">hot take:<br/><br/><b>“AI will replace content teams.”</b><br/><br/>No.<br/><br/>AI will replace the 17-tab workflow that makes content teams hate content.</div>
+          <div class="mt-5 mx-2 p-4 rounded-2xl bg-black text-white"><div class="text-[8px] text-white/40">LOVIZA</div><div class="mt-2 text-[15px] font-semibold">Strategy → Creation → Distribution → Learning</div></div>
+          <div class="px-2 mt-3 text-[8px] opacity-40">1.8K reposts · 9.7K likes</div>
+        </div>
+        <!-- YouTube -->
+        <div class="phone p-3 min-h-[410px] transform hover:-translate-y-2 transition duration-500 reveal">
+          <div class="flex items-center gap-2 px-2 py-2"><div class="w-7 h-7 rounded-lg bg-red-500 text-white text-[10px] grid place-items-center">▶</div><div><div class="text-[10px] font-semibold">Loviza</div><div class="text-[8px] opacity-45">AI content strategy</div></div></div>
+          <div class="mx-2 mt-3 h-44 rounded-2xl bg-gradient-to-br from-[#16121f] via-[#54206c] to-[#f472b6] p-5 text-white flex flex-col justify-end"><span class="text-[8px] opacity-60">MASTERCLASS / 08:42</span><div class="mt-2 text-[23px] leading-5 font-semibold">Build a content engine that compounds.</div></div>
+          <div class="px-2 mt-3 text-[10px] font-semibold">How to stop starting from zero every Monday</div>
+          <div class="px-2 mt-1 text-[8px] opacity-40">48K views · 2 days ago</div>
+          <div class="mt-3 mx-2 h-1.5 bg-black/10 rounded-full overflow-hidden"><div class="w-[62%] h-full bg-red-500 rounded-full"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section id="analytics" class="max-w-[1380px] mx-auto px-5 lg:px-8 pb-20 lg:pb-28">
+      <div class="card rounded-[24px] p-6 lg:p-9 reveal">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div><div class="text-[10px] uppercase tracking-[.2em] text-lime-200/70">Performance intelligence</div><h2 class="mt-2 text-3xl lg:text-4xl font-semibold tracking-[-.04em]">Your content gets smarter every week.</h2></div>
+          <div class="flex gap-1 p-1 rounded-full bg-white/[.03] border border-white/7 text-[10px]"><button class="px-3 py-1.5 rounded-full bg-white text-black font-medium">30 days</button><button class="px-3 py-1.5 text-white/40">90 days</button></div>
+        </div>
+        <div class="mt-8 grid lg:grid-cols-[1.5fr_.5fr_.5fr_.5fr] gap-3">
+          <div class="rounded-2xl bg-black/25 border border-white/6 p-5 min-h-[270px]">
+            <div class="flex justify-between"><div><div class="text-[9px] text-white/30 uppercase tracking-widest">Engagement velocity</div><div class="mt-1 text-3xl font-semibold">8.42%</div></div><span class="text-[10px] text-lime-200 bg-lime-300/8 px-2 py-1 rounded-full h-fit">+38.2%</span></div>
+            <div class="mt-7 h-[145px] flex items-end gap-1.5">
+              <i class="bar w-[4%] h-[22%] bg-white/10 rounded-t" style="animation-delay:.02s"></i><i class="bar w-[4%] h-[30%] bg-white/15 rounded-t"></i><i class="bar w-[4%] h-[27%] bg-white/15 rounded-t"></i><i class="bar w-[4%] h-[41%] bg-violet-400/45 rounded-t"></i><i class="bar w-[4%] h-[36%] bg-violet-400/45 rounded-t"></i><i class="bar w-[4%] h-[55%] bg-violet-400/55 rounded-t"></i><i class="bar w-[4%] h-[47%] bg-violet-400/55 rounded-t"></i><i class="bar w-[4%] h-[61%] bg-violet-400/65 rounded-t"></i><i class="bar w-[4%] h-[54%] bg-violet-400/65 rounded-t"></i><i class="bar w-[4%] h-[70%] bg-cyan-300/60 rounded-t"></i><i class="bar w-[4%] h-[66%] bg-cyan-300/65 rounded-t"></i><i class="bar w-[4%] h-[78%] bg-cyan-300/70 rounded-t"></i><i class="bar w-[4%] h-[72%] bg-cyan-300/70 rounded-t"></i><i class="bar w-[4%] h-[88%] bg-cyan-200/85 rounded-t"></i><i class="bar w-[4%] h-[82%] bg-cyan-200/85 rounded-t"></i><i class="bar w-[4%] h-[100%] bg-white rounded-t"></i></div>
+            <div class="flex justify-between text-[8px] text-white/20 mt-2"><span>W1</span><span>W2</span><span>W3</span><span>W4</span></div>
+          </div>
+          <div class="rounded-2xl bg-black/25 border border-white/6 p-5"><div class="text-[9px] text-white/30 uppercase tracking-widest">Best format</div><div class="mt-4 text-2xl font-semibold">Reels</div><div class="mt-1 text-[10px] text-white/35">3.2× avg reach</div><div class="mt-8 w-24 h-24 rounded-full mx-auto border-[14px] border-violet-400/70 border-r-cyan-300/80 border-b-white/10 rotate-[-35deg]"></div></div>
+          <div class="rounded-2xl bg-black/25 border border-white/6 p-5"><div class="text-[9px] text-white/30 uppercase tracking-widest">Top hook</div><div class="mt-4 text-[17px] leading-5 font-semibold">“You're not bad at content…”</div><div class="mt-8 text-[10px] text-lime-200">+91% retention</div><div class="mt-2 h-2 bg-white/5 rounded-full overflow-hidden"><div class="w-[91%] h-full bg-lime-300 rounded-full"></div></div></div>
+          <div class="rounded-2xl bg-black/25 border border-white/6 p-5"><div class="text-[9px] text-white/30 uppercase tracking-widest">Time recovered</div><div class="mt-4 text-3xl font-semibold">21.7h</div><div class="mt-1 text-[10px] text-white/35">this month</div><div class="mt-8 text-[10px] text-white/40">Equivalent to <span class="text-white">2.7 work days</span>.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISUAL PIPELINE -->
+    <section class="max-w-[1380px] mx-auto px-5 lg:px-8 pb-20 lg:pb-28">
+      <div class="grid lg:grid-cols-[.65fr_1.35fr] gap-3">
+        <div class="rounded-[22px] p-8 lg:p-10 bg-gradient-to-br from-[#18132e] via-[#111016] to-[#071417] border border-white/8 reveal">
+          <div class="text-[10px] uppercase tracking-[.2em] text-violet-200/70">The Loviza loop</div>
+          <h2 class="mt-4 text-4xl font-semibold tracking-[-.04em]">Create once.<br/><span class="text-white/35">Compound forever.</span></h2>
+          <p class="mt-5 text-[13px] leading-6 text-white/45">Your best ideas become reusable formats. Your best posts become strategy. Your strategy becomes tomorrow's content.</p>
+          <div class="mt-9 space-y-2">
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/[.035] border border-white/6"><span class="text-[11px]">Idea</span><span class="text-violet-200">→</span></div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/[.035] border border-white/6"><span class="text-[11px]">Story</span><span class="text-cyan-200">→</span></div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/[.035] border border-white/6"><span class="text-[11px]">Content</span><span class="text-pink-200">→</span></div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/[.035] border border-white/6"><span class="text-[11px]">Performance</span><span class="text-lime-200">↺</span></div>
+          </div>
+        </div>
+        <div class="card rounded-[22px] p-6 lg:p-8 overflow-hidden reveal">
+          <div class="flex items-center justify-between"><div><div class="text-[10px] uppercase tracking-[.2em] text-white/30">Content machine</div><div class="text-[17px] font-semibold mt-1">A single product story becomes a campaign</div></div><span class="text-[10px] border border-white/10 rounded-full px-3 py-1 text-white/45">12 outputs</span></div>
+          <div class="mt-7 grid sm:grid-cols-3 gap-3">
+            <div class="rounded-2xl p-4 bg-gradient-to-br from-violet-500/15 to-black border border-violet-300/10 min-h-[155px]"><div class="text-[9px] text-violet-200/60">01 · IDEA</div><div class="mt-5 text-[15px] font-semibold">“Content shouldn't feel like homework.”</div></div>
+            <div class="rounded-2xl p-4 bg-gradient-to-br from-cyan-400/10 to-black border border-cyan-300/10 min-h-[155px]"><div class="text-[9px] text-cyan-200/60">02 · CAMPAIGN</div><div class="mt-5 text-[15px] font-semibold">The 5-minute content team</div></div>
+            <div class="rounded-2xl p-4 bg-gradient-to-br from-pink-400/10 to-black border border-pink-300/10 min-h-[155px]"><div class="text-[9px] text-pink-200/60">03 · CTA</div><div class="mt-5 text-[15px] font-semibold">“Let Loviza run your next week.”</div></div>
+          </div>
+          <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div class="rounded-xl border border-white/6 bg-white/[.02] p-3"><div class="text-[9px] text-white/30">LINKEDIN</div><div class="mt-2 text-[10px]">Founder POV</div></div>
+            <div class="rounded-xl border border-white/6 bg-white/[.02] p-3"><div class="text-[9px] text-white/30">INSTAGRAM</div><div class="mt-2 text-[10px]">Reel + carousel</div></div>
+            <div class="rounded-xl border border-white/6 bg-white/[.02] p-3"><div class="text-[9px] text-white/30">X</div><div class="mt-2 text-[10px]">Hot take thread</div></div>
+            <div class="rounded-xl border border-white/6 bg-white/[.02] p-3"><div class="text-[9px] text-white/30">YOUTUBE</div><div class="mt-2 text-[10px]">Short explainer</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BIG STATS -->
+    <section class="border-y border-white/7 bg-white/[.015]">
+      <div class="max-w-[1380px] mx-auto px-5 lg:px-8 py-10">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          <div><div class="text-4xl lg:text-5xl font-semibold tracking-[-.05em]">10×</div><div class="text-[10px] uppercase tracking-[.18em] text-white/30 mt-2">More content velocity</div></div>
+          <div><div class="text-4xl lg:text-5xl font-semibold tracking-[-.05em]">21h</div><div class="text-[10px] uppercase tracking-[.18em] text-white/30 mt-2">Recovered per month*</div></div>
+          <div><div class="text-4xl lg:text-5xl font-semibold tracking-[-.05em]">5</div><div class="text-[10px] uppercase tracking-[.18em] text-white/30 mt-2">Channels, one brain</div></div>
+          <div><div class="text-4xl lg:text-5xl font-semibold tracking-[-.05em]">24/7</div><div class="text-[10px] uppercase tracking-[.18em] text-white/30 mt-2">Strategy on autopilot</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="max-w-[1380px] mx-auto px-5 lg:px-8 py-20 lg:py-28">
+      <div class="rounded-[28px] overflow-hidden relative bg-gradient-to-br from-violet-600 via-fuchsia-500 to-cyan-300 text-black p-8 lg:p-16 reveal">
+        <div class="absolute -right-20 -top-28 w-[420px] h-[420px] rounded-full border-[70px] border-black/10"></div>
+        <div class="absolute right-24 bottom-[-90px] w-64 h-64 rounded-full border-[50px] border-white/20"></div>
+        <div class="relative z-10 max-w-[780px]">
+          <div class="text-[10px] uppercase tracking-[.22em] font-semibold opacity-60">Your always-on content team</div>
+          <h2 class="mt-5 text-5xl lg:text-7xl font-semibold tracking-[-.06em] leading-[.9]">Make your brand impossible to ignore.</h2>
+          <p class="mt-7 max-w-[580px] text-[15px] leading-6 opacity-70">Give Loviza your brand. Get your strategy, content calendar and autopilot — without adding another person to your team.</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <button class="px-6 py-3.5 rounded-full bg-black text-white text-[13px] font-semibold hover:scale-[1.02] transition">Start Loviza free →</button>
+            <button class="px-6 py-3.5 rounded-full border border-black/15 bg-white/20 text-[13px] font-semibold hover:bg-white/30 transition">Book a strategy demo</button>
+          </div>
+          <div class="mt-5 text-[9px] uppercase tracking-widest opacity-50">No credit card · cancel anytime · built for ambitious brands</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/7">
+    <div class="max-w-[1380px] mx-auto px-5 lg:px-8 py-8 flex flex-col md:flex-row justify-between gap-4 text-[10px] text-white/30">
+      <div>© 2026 Loviza. AI Brand Strategy + Auto-Content.</div>
+      <div class="flex gap-5"><a href="#platform" class="hover:text-white">Platform</a><a href="#analytics" class="hover:text-white">Analytics</a><a href="#cta" class="hover:text-white">Get started</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal: keeps the page lively without a heavy runtime dependency.
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach((entry)=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+    // Subtle pointer glow on cards.
+    document.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('pointermove', e=>{
+        const r=card.getBoundingClientRect();
+        card.style.background = `radial-gradient(360px circle at ${e.clientX-r.left}px ${e.clientY-r.top}px, rgba(139,92,246,.08), transparent 42%), linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))`;
+      });
+      card.addEventListener('pointerleave', ()=>{
+        card.style.background='linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))';
+      });
+    });
+  </script>
+</body>
+</html>
