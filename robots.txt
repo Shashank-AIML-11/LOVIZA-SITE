@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.loviza.com/sitemap.xml
+Sitemap: https://loviza.click/sitemap.xml
