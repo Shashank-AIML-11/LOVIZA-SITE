@@ -382,8 +382,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const supabaseClient = window.supabase.createClient(
-      "https://gcyvsurtfikyekggkthk.supabase.co",
-      "sb_publishable_RyLp4N_9Ljw4Yg9rHEUQYQ_7ZtOKV-I"
+      "https://owncxefmxvekvwtpwilp.supabase.co",
+      "sb_publishable_WDSoGGk_b3LHcTcUHbVmNQ_ZG4j8CJq"
     );
 
     function openEarlyAccessModal(){
@@ -421,7 +421,7 @@
       status.style.color = '';
 
       const { error } = await supabaseClient
-        .from('early_access_signups')
+        .from('loviza_website_table')
         .insert({ email: email, source: 'blog_page' });
 
       if(error){
