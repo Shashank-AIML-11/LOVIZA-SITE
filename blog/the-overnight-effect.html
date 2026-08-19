@@ -318,7 +318,7 @@
       <a href="/index.html#blog">Blog</a>
       <a href="/index.html#pricing">Pricing</a>
     </div>
-    <button type="button" onclick="openEarlyAccessModal()" class="nav-cta">Early Access</button>
+    <a href="/index.html#" class="nav-cta">Early Access</a>
   </nav>
 </header>
 
@@ -338,6 +338,7 @@
     </div>
     <div class="article-footer">
       <a href="/index.html#blog" class="btn-ghost">&larr; Back to all posts</a>
+      
     </div>
 
     <div class="related-nav">
@@ -357,92 +358,6 @@
     <div>&copy; 2026 LOVIZA. All rights reserved.</div>
   </div>
 </footer>
-
-
-  <!-- EARLY ACCESS MODAL -->
-  <div id="earlyAccessOverlay" class="modal-overlay" onclick="if(event.target===this) closeEarlyAccessModal()">
-    <div class="modal-box">
-      <button type="button" onclick="closeEarlyAccessModal()" aria-label="Close" class="modal-close">✕</button>
-      <div class="eyebrow" style="color:var(--gold); font-family:'JetBrains Mono'; font-size:11px; text-transform:uppercase; letter-spacing:.1em;">Early Access</div>
-      <h3>Get in before the waitlist closes.</h3>
-      <p class="modal-sub">Leave your email and we'll send your invite as soon as a spot opens up.</p>
-      <form id="earlyAccessForm" onsubmit="return handleEarlyAccessSubmit(event)">
-        <div class="modal-field">
-          <label for="earlyAccessEmail">Email address</label>
-          <input id="earlyAccessEmail" type="email" required placeholder="you@yourbrand.com" />
-        </div>
-        <button id="earlyAccessSubmitBtn" type="submit" class="modal-submit">Submit</button>
-        <p id="earlyAccessStatus" class="modal-note" role="status">No spam. One email when your access is ready.</p>
-      </form>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const supabaseClient = window.supabase.createClient(
-      "https://owncxefmxvekvwtpwilp.supabase.co",
-      "sb_publishable_WDSoGGk_b3LHcTcUHbVmNQ_ZG4j8CJq"
-    );
-
-    function openEarlyAccessModal(){
-      const overlay = document.getElementById('earlyAccessOverlay');
-      overlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      setTimeout(()=>{
-        const input = document.getElementById('earlyAccessEmail');
-        if(input) input.focus();
-      }, 50);
-    }
-
-    function closeEarlyAccessModal(){
-      const overlay = document.getElementById('earlyAccessOverlay');
-      overlay.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape') closeEarlyAccessModal();
-    });
-
-    async function handleEarlyAccessSubmit(event){
-      event.preventDefault();
-      const input = document.getElementById('earlyAccessEmail');
-      const btn = document.getElementById('earlyAccessSubmitBtn');
-      const status = document.getElementById('earlyAccessStatus');
-      const email = input.value.trim();
-      if(!email) return false;
-
-      btn.disabled = true;
-      const originalLabel = btn.textContent;
-      btn.textContent = 'Submitting…';
-      status.textContent = 'No spam. One email when your access is ready.';
-      status.style.color = '';
-
-      const { error } = await supabaseClient
-        .from('loviza_website_table')
-        .insert({ email: email, source: 'blog_page' });
-
-      if(error){
-        btn.disabled = false;
-        btn.textContent = originalLabel;
-        if(error.code === '23505'){
-          status.textContent = "You're already on the list — we'll be in touch!";
-          status.style.color = '#a3e635';
-        } else {
-          status.textContent = 'Something went wrong. Please try again.';
-          status.style.color = '#fca5a5';
-        }
-        return false;
-      }
-
-      btn.textContent = "You're in! ✓";
-      status.textContent = "Thanks — we'll email you when your spot opens up.";
-      status.style.color = '#a3e635';
-      input.disabled = true;
-      setTimeout(closeEarlyAccessModal, 2200);
-      return false;
-    }
-  </script>
 
 </body>
 </html>
